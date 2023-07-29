@@ -1,18 +1,19 @@
 const canvas = document.getElementById("canvas-snake");
 const ctx = canvas.getContext("2d");
 const cte = canvas.getContext("2d");
-
 ctx.fillStyle = "#ffffff";
 const decimal = 0.8;
 const inner =
   window.innerWidth > window.innerHeight
-    ? Math.round((window.innerHeight - 180) * decimal)
+    ? Math.round((window.innerHeight - 210) * decimal)
     : Math.round(window.innerWidth * decimal);
 const canvasSize = Math.trunc(inner / 34) * 34;
 const size = Math.round(canvasSize / 34);
 let a = 0;
 let xChanged = 0;
 let yChanged = Math.round(canvasSize * 0.47058824);
+
+document.getElementById('score').innerText = localStorage.getItem("last-score") ?  `Dernier Score : ${localStorage.getItem("last-score")}` : "";
 
 canvas.width = Math.round(canvasSize);
 canvas.height = Math.round(canvasSize);
@@ -198,6 +199,7 @@ class snake {
     if (this.skines.length > 2) {
       for (let i = 1; i < this.skines.length; i++) {
         if (this.skines[i][0] === x && this.skines[i][1] === y) {
+          localStorage.setItem("last-score", this.skines.length);
           window.location.reload();
         }
       }
