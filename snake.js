@@ -1,38 +1,46 @@
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("canvas-snake");
 const ctx = canvas.getContext("2d");
 const cte = canvas.getContext("2d");
 
 ctx.fillStyle = "#ffffff";
+const decimal = 0.8;
+const inner =
+  window.innerWidth > window.innerHeight
+    ? Math.round((window.innerHeight - 180) * decimal)
+    : Math.round(window.innerWidth * decimal);
+const canvasSize = Math.trunc(inner / 34) * 34;
+const size = Math.round(canvasSize / 34);
 let a = 0;
 let xChanged = 0;
-let yChanged = 240;
-const canvasSize = 510;
-const size = 15;
+let yChanged = Math.round(canvasSize * 0.47058824);
+
+canvas.width = Math.round(canvasSize);
+canvas.height = Math.round(canvasSize);
 
 const ListernerArrows = () => {
-  document.addEventListener(
-    "keydown",
-    (arrow) => {
-      let direction = Snake.info;
-      if (
-        arrow.key === "ArrowLeft" ||
-        arrow.key === "ArrowRight" ||
-        arrow.key === "ArrowDown" ||
-        arrow.key === "ArrowUp"
-      ) {
-        if (direction === "ArrowLeft") {
-          if (arrow.key != "ArrowRight") Snake.setDirection(arrow.key);
-        } else if (direction === "ArrowRight" || direction == undefined) {
-          if (arrow.key != "ArrowLeft") Snake.setDirection(arrow.key);
-        } else if (direction === "ArrowUp") {
-          if (arrow.key != "ArrowDown") Snake.setDirection(arrow.key);
-        } else if (direction === "ArrowDown") {
-          if (arrow.key != "ArrowUp") Snake.setDirection(arrow.key);
-        }
+  document.addEventListener("keydown", (arrow) => {
+    let direction = Snake.info;
+    if (
+      arrow.key === "ArrowLeft" ||
+      arrow.key === "ArrowRight" ||
+      arrow.key === "ArrowDown" ||
+      arrow.key === "ArrowUp"
+    ) {
+      if (direction === "ArrowLeft") {
+        if (arrow.key != "ArrowRight") Snake.setDirection(arrow.key);
+      } else if (direction === "ArrowRight" || direction == undefined) {
+        if (arrow.key != "ArrowLeft") Snake.setDirection(arrow.key);
+      } else if (direction === "ArrowUp") {
+        if (arrow.key != "ArrowDown") Snake.setDirection(arrow.key);
+      } else if (direction === "ArrowDown") {
+        if (arrow.key != "ArrowUp") Snake.setDirection(arrow.key);
       }
-    },
-    { once: false }
-  );
+    }
+  });
+
+  document.querySelectorAll(".arrow-key").forEach((arrow) => {
+    arrow.addEventListener("click", () =>  Snake.setDirection(arrow.id));
+  });
 };
 
 ListernerArrows();
@@ -44,6 +52,7 @@ class target {
     this.randomGreat2;
     this.snake = [];
   }
+
   setPoints(snake) {
     this.snake = snake;
 
@@ -61,12 +70,14 @@ class target {
 
     this.randomGreat1 = randomGreat1;
     this.randomGreat2 = randomGreat2;
+
     ctx.fillStyle = "#f00020";
     ctx.fillRect(randomGreat1, randomGreat2, size, size);
   }
 
   getSnake(x, y) {
     if (this.snake[0] === x && this.snake[0] === y) return true;
+
     for (let i = 0; i < this.snake.length; i++) {
       if (this.snake[i][0] === x && this.snake[i][1] === y) {
         return true;
@@ -148,6 +159,7 @@ class snake {
 
     this.xChanged = xChanged;
     this.yChanged = yChanged;
+
     if (boolean) {
       this.skines.push([this.xChanged, this.yChanged]);
     } else {
@@ -188,8 +200,6 @@ const firstPos = [xChanged, yChanged];
 initTarget.setPoints(firstPos).setTarget();
 
 const game = (param) => {
-  //ListernerArrows();
-
   a++;
 
   const direction = Snake.getDirection();
@@ -206,13 +216,6 @@ const game = (param) => {
     initTarget.setPoints(Snake.skines);
     Snake.setSkin(xChanged, yChanged, "none", true);
     initTarget.setTarget();
-
-    let audio = document.createElement("audio");
-    audio.setAttribute("autoplay", "autoplay");
-    let eleme = document.createElement("source");
-    eleme.setAttribute("src", "audio.mp3");
-    eleme.setAttribute("type", "audio/mpeg");
-    audio.appendChild(eleme);
   }
 
   Snake.skines.pop();
