@@ -39,7 +39,19 @@ const ListernerArrows = () => {
   });
 
   document.querySelectorAll(".arrow-key").forEach((arrow) => {
-    arrow.addEventListener("click", () =>  Snake.setDirection(arrow.id));
+    arrow.addEventListener("click", () => {
+      let direction = Snake.info;
+
+      if (direction === "ArrowLeft") {
+        if (arrow.id != "ArrowRight") Snake.setDirection(arrow.id);
+      } else if (direction === "ArrowRight" || direction == undefined) {
+        if (arrow.id != "ArrowLeft") Snake.setDirection(arrow.id);
+      } else if (direction === "ArrowUp") {
+        if (arrow.id != "ArrowDown") Snake.setDirection(arrow.id);
+      } else if (direction === "ArrowDown") {
+        if (arrow.id != "ArrowUp") Snake.setDirection(arrow.id);
+      }
+    });
   });
 };
 
